@@ -1,0 +1,76 @@
+<div id="body" class="accountPage" ng-controller="accountCtr">
+    <div class="header">
+        <div class="image-container">
+            <input style="display:none;" type="file" id="profileImgInput" accept="image/*">
+            <img id="profileImg" class="profile-pic" ng-src="{{currentUser.img_url}}" alt="">
+            <span ng-click="selectProfileImg()" class="overlay white-text"><i class="material-icons">camera_alt</i></span>
+        </div>
+    </div>
+    <div id="sub-body" class="body">
+        <div class="user-details center-align">
+            <h4>{{currentUser.fname+" "+currentUser.lname}}</h4>
+            <span>@{{currentUser.username}}</span>
+            <div class="row">
+                <div class="col s6 pane">
+                    <h4>{{currentBooks.length}}</h4>
+                    <span>Books</span>
+                </div>
+                <div class="col s6 pane">
+                    <h4>{{currentPublications.length}}</h4>
+                    <span>Publications</span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <form class="col s8" action="#">
+                <div class="row">
+                    <div class="col s6">
+                        <div class="input-field">
+                            <label class="active" for="fname">First Name</label>
+                            <input type="text" id="fname" ng-disabled="!editUserBtn" ng-model="currentUser.fname">
+                        </div>
+                    </div>
+                    <div class="col s6">
+                        <div class="input-field">
+                            <label class="active" for="lname">Last Name</label>
+                            <input ng-disabled="!editUserBtn" type="text" id="lname" ng-model="currentUser.lname">
+                        </div>
+                    </div>
+                    <div class="col s6">
+                        <div class="input-field">
+                            <label class="active" for="phone">Phone Number</label>
+                            <input ng-disabled="!editUserBtn" type="number" id="phone" ng-model="currentUser.phone">
+                        </div>
+                    </div>
+                    <div class="col s6">
+                        <div class="input-field">
+                            <label class="active" for="username">Username</label>
+                            <input ng-disabled="!editUserBtn" type="text" id="username" ng-model="currentUser.username">
+                        </div>
+                    </div>
+                    <div  ng-show="editUserBtn" class="col s6">
+                        <div class="input-field">
+                            <label class="active" for="passowrd">Current Password</label>
+                            <input type="password" placeholder="Enter current password" id="passowrd" ng-model="old_password">
+                        </div>
+                    </div>
+                    <div  ng-show="editUserBtn" class="col s6">
+                        <div class="input-field">
+                            <label class="active" for="password">New Password</label>
+                            <input type="password" placeholder="Enter new password" id="password" ng-model="new_password">
+                        </div>
+                    </div>
+                    <div class="right-align col s12">
+                        <button type="submit"  ng-show="false" class="btn blue waves-effect">
+                            <i class="left material-icons">arrow_upward</i> Update
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div class="col s4 form-actions">
+                <button ng-hide="editUserBtn" ng-click="editUser()" class="btn-flat blue-text blue-border blue-text waves-effect"><i class="left material-icons">edit</i>Edit</button>
+                <button ng-click="updateUser()" ng-show="editUserBtn" class="btn-flat brown-border brown-text waves-effect"><i class="left material-icons">undo</i>Done</button>
+            </div>
+        </div>
+    </div>
+</div>

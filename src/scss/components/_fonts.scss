@@ -1,0 +1,90 @@
+/* Raleway font*/
+@font-face{
+    font-family:Raleway;
+    src:url(../fonts/Raleway/Raleway-Light.ttf);
+}
+@font-face{
+    font-family:Raleway;
+    src:url(../fonts/Raleway/Raleway-Bold.ttf);
+    font-weight:bold;
+}
+@font-face{
+    font-family:Raleway;
+    src:url(../fonts/Raleway/Raleway-Italic.ttf);
+    font-style: italic;
+
+}
+/* Ammaranth font --*/
+
+@font-face{
+    font-family: amar;
+    src:url(../fonts/Amaranth/Amaranth-Regular.ttf);
+}
+@font-face{
+    font-family: amar;
+    src:url(../fonts/Amaranth/Amaranth-Bold.ttf);
+    font-weight:bold;
+    font-stretch:expanded;
+}
+@font-face{
+    font-family: amar;
+    src:url(../fonts/Amaranth/Amaranth-Italic.ttf);
+    font-style:italic;
+}
+@font-face{
+    font-family: amar;
+    src:url(../fonts/Amaranth/Amaranth-BoldItalic.ttf);
+    font-weight:bold;
+    font-style:italic;
+}
+@font-face{
+    font-family: Acme;
+    src:url(../fonts/Acme/Acme-Regular.ttf);
+}
+@font-face{
+    font-family: Fira_Sans;
+    src:url(../fonts/Fira_Sans/FiraSans-Regular.ttf);
+}
+@font-face{
+    font-family: Fira_SansLight;
+    src:url(../fonts/Fira_Sans/FiraSans-Light.ttf);
+}
+@font-face{
+    font-family: Fira_SansMedium;
+    src:url(../fonts/Fira_Sans/FiraSans-Medium.ttf);
+}
+@font-face{
+    font-family: Merriweather_SansRegular;
+    src:url(../fonts/Merriweather_Sans/MerriweatherSans-Regular.ttf);
+}
+@font-face{
+    font-family: Open_SansRegular;
+    src:url(../fonts/Open_Sans/OpenSans-Regular.ttf);
+}
+@font-face{
+    font-family: kaushan_script;
+    src:url(../fonts/Kaushan_Script/KaushanScript-Regular.ttf);
+}
+@font-face{
+    font-family: domine;
+    src:url(../fonts/Domine/Domine-Regular.ttf);
+}
+@font-face{
+    font-family: domine_bold;
+    src:url(../fonts/Domine/Domine-Bold.ttf);
+}
+.font-kaushan{
+    font-family: kaushan_script;
+}
+.font-raleway{
+     font-family:Raleway;
+}
+.font-amar{
+    font-family: amar;
+}
+.font-acme{
+    font-family: Acme;
+}
+.font-fira{
+    font-family: Fira_Sans;
+}

@@ -1,0 +1,151 @@
+body{
+  overflow: hidden;
+}
+input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* width */
+::-webkit-scrollbar {
+  width:8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+html,body{
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+.row{
+  &.full{
+    height: 100%;
+    width: 100%;
+  }
+  margin: 0px !important;
+}
+/*Container, container body, iframe*/
+.mce-tinymce, .mce-container-body, #code_ifr {
+  min-height: 100% !important;
+}
+/*Container body*/
+.mce-container-body {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+/*Editing area*/
+.mce-container-body .mce-edit-area {
+  position: absolute;
+  top: 69px;
+  bottom: 37px;
+  left: 0;
+  right: 0;
+}
+/*Footer*/
+.mce-tinymce .mce-statusbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+iframe#editor_ifr{
+  height: 100% !important;
+}
+/* ================================================================================================*/
+.full-height{
+  height: 100%;
+}
+#first-col{
+  height: 100%;
+  .header{
+    background: #0D47A1;
+    padding: 10px;
+    height: 14%;
+    h6{
+      white-space: nowrap;
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .title{
+      margin: 0 0 5px;
+    }
+  }
+  .body{
+    height: 86%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding-bottom: 20px;
+  }
+}
+#second-col{
+  height: 100%;
+  .editor_container{
+    height: 100%;
+  }
+}
+.chap_list{
+  padding: 20px 10px;
+  margin: 8px 0;
+  position: relative;
+  width: 100%;
+  .close{
+    position: absolute;
+    top: 30%;
+    cursor: pointer;
+    right:1%;
+    border: 1px solid #999;
+    background: #333;
+    border-radius: 50%;
+    height: 25px;
+    color: #eee;
+    line-height: 25px;
+    text-align: center;
+    width: 25px;
+    i{
+      font-size: 14px;
+    }
+  }
+  &.active{
+    background-color: #ddd;
+    //color: #fff;
+  }
+  .value{
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: block;
+    height: 1.5rem;
+    width: 93%;
+    &:focus{
+      background-color: #fff;
+      color: #0c0c0d;
+    }
+  }
+}
+.add_section_button {
+  padding: 0;
+  button{
+    padding:6px;
+    height: auto;
+    margin-top: 15px;
+    border-top: 1px solid #ddd;
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+  }
+}

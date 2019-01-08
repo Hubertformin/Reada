@@ -1,0 +1,68 @@
+<section id="body" class="recentPage" ng-controller="recentCtr">
+    <div class="header white-text orange darken-4">
+        <h4 class="heading-text">Recent</h4>
+    </div>
+    <div class="body">
+        <div ng-show="myBooks.length === 0" class="overlay">
+            <div class="center center-align grey-text">
+                <img src="img/no_recent_activity.png" alt="">
+                <h4>No recent Activity</h4>
+                <p>All your books you read and edit would show here.</p>
+            </div>
+        </div>
+        <div class="row reads">
+            <div class="col s12 controls">
+                <h6>Your reads</h6>
+                <!--<button class="btn-flat"><i class="material-icons">sort</i></button>-->
+                <hr>
+            </div>
+            <div class="col s12">
+                <div ng-repeat="b in recentBooks track by $index" class="col s3">
+                    <div class="card" style="height:261px;">
+                        <div class="card-image waves-effect waves-block waves-light" style="height:61%;">
+                            <img class="activator" src="img/books.png">
+                        </div>
+                        <div class="card-content">
+                            <span class="card-title activator grey-text text-darken-4">{{b.title}}</span>
+                            <p><span class="overflow-text">{{b.category}} | <small class="blue-text">Read {{timeAgo(b.readTime)}}</small></span></p>
+                        </div>
+                        <div class="card-reveal">
+                            <span class="card-title grey-text text-darken-4">{{b.title}}<i class="material-icons right">close</i></span>
+                            <span class="description">{{b.description}}</span>
+                            <span class="overflow-text">Read {{timeAgo(b.readTime)}}</span>
+                            <hr>
+                            <button ng-click="openBook(b)" title="Read" class="btn blue waves-effect"><i class="material-icons left">remove_red_eye</i>Read</button>
+                           </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row modified">
+            <div class="col s12 controls">
+                <h6>Modified</h6>
+                <!--<button class="btn-flat"><i class="material-icons">sort</i></button>-->
+                <hr>
+            </div>
+            <div class="col s12">
+                <div ng-repeat="b in editBooks track by $index" class="col s3">
+                    <div class="card" style="height:261px;">
+                        <div class="card-image waves-effect waves-block waves-light" style="height:61%;">
+                            <img class="activator" src="img/books.png">
+                        </div>
+                        <div class="card-content">
+                            <span class="card-title activator grey-text text-darken-4">{{b.title}}</span>
+                            <p><span class="overflow-text">{{b.category}} | <small class="green-text">Modified {{timeAgo(b.date)}}</small></span></p>
+                        </div>
+                        <div class="card-reveal">
+                            <span class="card-title grey-text text-darken-4">{{b.title}}<i class="material-icons right">close</i></span>
+                            <span class="description">{{b.description}}</span>
+                            <span class="overflow-text">Modified {{timeAgo(b.date)}}</span>
+                            <hr>
+                            <button ng-click="openBook(b)" title="Read" class="btn blue waves-effect"><i class="material-icons left">remove_red_eye</i>Read</button>
+                           </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

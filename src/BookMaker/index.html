@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/materialize.css">
+    <link rel="stylesheet" href="../css/materialicons/icone91f.css">
+    <link rel="stylesheet" href="../css/waitMe.min.css">
+    <link rel="stylesheet" href="../css/BookMaker.css">
+    <script src="../js/angular.js"></script>
+    <script src="../js/materialize.js"></script>
+    <script src="../js/waitMe.min.js"></script>
+</head>
+<body ng-app="Editor" ng-controller="mainCtr">
+<div class="row full">
+    <div id="first-col" class="col s3" style="padding: 0;">
+        <div class="header z-depth-2 white-text">
+            <h6>{{bookData.title}}</h6>
+            <small>ID: {{bookData.bookID}}</small>
+        </div>
+        <div class="body">
+            <small>Sections</small>
+            <hr>
+            <div id="sections">
+                <div ng-repeat="c in currentBook.contents track by $index" onclick="switchSection(event)" class="chap_list z-depth-2">
+                    <span class="value" contentEditable="true">{{c.title}}</span>
+                    <span onclick="closeChapList(event)" class="close"><i class="material-icons">close</i></span>
+                </div>
+            </div>
+            <div class="add_section_button">
+                <button ng-click="addSection()" class="btn-flat"><i class="material-icons teal-text left">add_circle_outline</i> Add Section</button>
+            </div>
+        </div>
+    </div>
+    <div id="second-col" class="col s9" style="padding: 0;">
+        <section class="editor_container">
+            <textarea id="editor" cols="30" rows="10"></textarea>
+        </section>
+    </div>
+</div>
+
+
+<script src="main.js"></script>
+</body>
+</html>

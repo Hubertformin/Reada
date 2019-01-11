@@ -11,7 +11,7 @@
             <img src="img/empty.png">
             <h5>It's getting cold in here</h5>
             <p>You haven't created any content yet. All your books would appear here!</p>
-            <button data-target="createBook" class="btn waves-light waves-effect modal-trigger">
+            <button ng-click="openCreateModal()" class="btn waves-light waves-effect">
                 <i class="left material-icons">important_devices</i> Get started</button>
         </div>
         <!-- -->
@@ -30,11 +30,11 @@
                             <img class="activator" src="img/books.png">
                         </div>
                         <div class="card-content">
-                            <span class="card-title activator grey-text text-darken-4">{{b.title}}</span>
+                            <span class="card-title activator grey-text text-darken-4" title="{{b.title}}">{{b.title}}</span>
                             <p><span>{{b.category}}</span></p>
                         </div>
                         <div class="card-reveal">
-                            <span class="card-title grey-text text-darken-4">{{b.title}}<i class="material-icons right">close</i></span>
+                            <span class="card-title grey-text text-darken-4" title="{{b.title}}">{{b.title}}<i class="material-icons right">close</i></span>
                             <span class="description">{{b.description}}</span>
                             <span>Modified {{timeAgo(b.date)}}</span>
                             <hr>

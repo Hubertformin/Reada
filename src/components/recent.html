@@ -1,5 +1,5 @@
 <section id="body" class="recentPage" ng-controller="recentCtr">
-    <div class="header white-text orange darken-4">
+    <div class="header white-text blue darken-4">
         <h4 class="heading-text">Recent</h4>
     </div>
     <div class="body">
@@ -10,7 +10,7 @@
                 <p>All your books you read and edit would show here.</p>
             </div>
         </div>
-        <div class="row reads">
+        <div ng-hide="recentBooks.length === 0" class="row reads">
             <div class="col s12 controls">
                 <h6>Your reads</h6>
                 <!--<button class="btn-flat"><i class="material-icons">sort</i></button>-->

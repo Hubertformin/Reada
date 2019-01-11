@@ -82,6 +82,14 @@ div.body-overlay{
     bottom: 0;
     background-color: rgba(0,0,0,0.5);
 }
+div.wrapper{
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+}
 section#side_nav{
     position: fixed;
     top: 0;
@@ -217,6 +225,44 @@ section#bookReader{
     right: 0;
     padding: 40px;
     overflow-y: auto;
+  }
+  //
+  #detailsModal{
+    position: relative;
+    i.description{
+      outline: 1px solid #999;
+      padding: 5px;
+    }
+  }
+  //dark mode
+  &.darkMode{
+    background: #0C1021;
+    color: #f2f2f2;
+    section#mainNav{
+      select{
+        background: #0C1021;
+        color: #f2f2f2;
+        border-color: #f2f2f2;
+      }
+      button.btn-flat{
+        color: #eee;
+      }
+    }
+    #detailsModal{
+      position: relative;
+      color: #fff;
+      background: #0C1021;
+      i.description{
+        outline: 1px solid #fff;
+        padding: 5px;
+      }
+      .modal-footer{
+        background: unset;
+        button{
+          color: #fff;
+        }
+      }
+    }
   }
 }
 @import "bin/recent";

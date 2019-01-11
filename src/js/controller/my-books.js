@@ -58,7 +58,13 @@ app.controller("myBooksCtr",($scope)=>{
     }
     //launch editor window
     $scope.launchEditor = ({title,bookID})=>{
-        ipcRenderer.send('launchEditor', JSON.stringify({title,bookID}));
+        fs.exists(`bin/publications/pub-${bookID}.rby`,exists => {
+            if (exists) {
+                ipcRenderer.send('launchEditor', JSON.stringify({title,bookID}));
+            } else {
+                notify.warning(`Book not found! <br/>Possible cause: Deleted by another program!`);
+            }
+        })
     };
     //open create book modal
     $scope.openCreateModal = ()=>{
@@ -231,8 +237,7 @@ app.controller("myBooksCtr",($scope)=>{
                 $scope.deleteBookName = "";
                 fs.unlink(path,(err)=>{
                     if(err) {
-                        console.error(err)
-                        return;
+                        console.error(err);
                     };
                     notify.info("Book was deleted!");
                     modal.close();
@@ -244,4 +249,5 @@ app.controller("myBooksCtr",($scope)=>{
         });
     }
 
+    //TODO Open Book function was placed in controller js for global purposes
 });

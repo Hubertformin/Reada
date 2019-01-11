@@ -53,7 +53,9 @@ app.controller("mainCtr",($scope)=>{
                 console.log("Read time saved!");
             })
             $scope.$apply()
-        });
+        }).catch(err=>{
+            notify.warning(`Book not found! <br/>Possible cause: Deleted by another program!`);
+        })
     }
 
     const {ipcRenderer} = require("electron");
@@ -126,7 +128,6 @@ app.controller("mainCtr",($scope)=>{
                     console.log($scope.currentUser.userID);
                     $scope.db.users.get($scope.currentUser.userID,(user)=>{
                         $scope.currentUser = user;
-                        console.log($scope.currentUser.image);
                         if(typeof $scope.currentUser.image === "object") {
                             $scope.currentUser.img_url = URL.createObjectURL($scope.currentUser.image);
                         }else{

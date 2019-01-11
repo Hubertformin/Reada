@@ -63,7 +63,7 @@ app.controller("mainCtr",($scope)=>{
             plugins: [
                 'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker',
                 'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
-                'save table contextmenu directionality emoticons template paste textcolor'
+                'save table contextmenu spellchecker directionality emoticons template paste textcolor'
             ],
             menubar:"edit view insert format tools table",
            init_instance_callback: (editor) =>{
@@ -74,7 +74,20 @@ app.controller("mainCtr",($scope)=>{
            },
             toolbar: 'styleselect | bold italic underline fontselect fontsizeselect | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview fullpage | forecolor backcolor emoticons',
             image_title:true,
+            browser_spellcheck:true,
+            contextmenu:false,
             image_advtab:true,
+            //spellchecker overriden callback
+            /*spellchecker_callback: (method, text, success, failure)=>{
+              var words = text.match(this.getWordCharPattern());
+              if (method == "spellcheck") {
+                  var suggestions = {};
+                  for (var i = 0;i < words.length; i++) {
+                      suggestions[words[i]] = ["First", "second"]
+                  }
+                  success(suggestions);
+              }
+            },*/
             automatic_uploads: true,
             // URL of our upload handler (for more details check: https://www.tinymce.com/docs/configure/file-image-upload/#images_upload_url)
             // images_upload_url: 'postAcceptor.php',

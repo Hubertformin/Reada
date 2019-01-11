@@ -88,23 +88,24 @@
         </div>
     </section>
     <ul id="slide-out" class="sidenav sidenav-fixed">
-                    <li><div class="user-view">
-                      <div class="background">
-                        <img src="img/sidenav-bg.jpg">
-                      </div>
-                      <a href="#!account"><img id="main_user_img" class="circle" ng-src="{{currentUser.img_url}}"></a>
-                        <a href="#!account"><span class="white-text name">{{currentUser.fname+" "+currentUser.lname}}</span></a>
-                      <a href="#!account"><span class="white-text email">@{{currentUser.username}}</span></a>
-                    </div></li>
-                    <li><a class="waves-effect" href="#/!"><i class="material-icons">access_time</i>Recent</a></li>
-                    <!--<li><a class="waves-effect" href="#!library"><i class="material-icons">library_books</i>Library</a></li>-->
-                    <li><a class="waves-effect" href="#!store"><i class="material-icons">shopping_basket</i>Store</a></li>
-                    <li><div class="divider"></div></li>
-                    <li><a class="subheader">Personal</a></li>
-                    <li class=""><a href="#!my_books"><i class="material-icons">book</i>My Books</a></li>
-                    <li class=""><a href="#!account"><i class="material-icons">person</i>Account</a></li>
-                    <!--<li class=""><a data-target="settings" class="sidenav-trigger" href="javascript:void(0)"><i class="material-icons">settings</i> Settings</a></li>-->
-                  </ul>
+        <li><div class="user-view">
+            <div class="background">
+                <img src="img/alone.jpg">
+            </div>
+            <a href="#!account"><img id="main_user_img" class="circle" ng-src="{{currentUser.img_url}}"></a>
+            <a href="#!account"><span class="white-text name">{{currentUser.fname+" "+currentUser.lname}}</span></a>
+            <a href="#!account"><span class="white-text email">@{{currentUser.username}}</span></a>
+        </div>
+        </li>
+        <li><a class="waves-effect" href="#/!"><i class="material-icons">access_time</i>Recent</a></li>
+        <!--<li><a class="waves-effect" href="#!library"><i class="material-icons">library_books</i>Library</a></li>-->
+        <li><a class="waves-effect" href="#!store"><i class="material-icons">shopping_basket</i>Store</a></li>
+        <li><div class="divider"></div></li>
+        <li><a class="subheader">Personal</a></li>
+        <li class=""><a href="#!my_books"><i class="material-icons">book</i>My Books</a></li>
+        <li class=""><a href="#!account"><i class="material-icons">person</i>Account</a></li>
+        <!--<li class=""><a data-target="settings" class="sidenav-trigger" href="javascript:void(0)"><i class="material-icons">settings</i> Settings</a></li>-->
+    </ul>
     <section id="main">
         <a href="javascript:void(0)" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
         <div id="view" ng-view></div>
@@ -114,7 +115,7 @@
 
     </nav>-->
     <!--Book reader-->
-    <section id="bookReader">
+    <section id="bookReader" ng-init="darkMode=false" ng-class="(darkMode)?'darkMode':''">
         <section id="mainNav">
             <div class="row">
                 <div class="col s4">
@@ -124,6 +125,12 @@
                     <select id="bookSections" class="browser-default" style="height:37px;"></select>
                 </div>
                 <div class="col s4 right-align">
+                    <span>
+                        <label>
+                            <input type="checkbox" class="filled-in" ng-model="darkMode" />
+                            <span>Dark Mode</span>
+                        </label>
+                    </span>
                     <button class="btn-flat modal-trigger" data-target="detailsModal"><i class="material-icons">more_vert</i></button>
                     <button ng-click="BookReader.close()" title="Close" class="btn-flat"><i class="material-icons">close</i></button>
                 </div>
@@ -137,8 +144,8 @@
                 <span>Details</span>
                 <hr>
                 <h5 class="bookTitle orange-text"></h5>
-                <p><strong>Category:</strong> <span class="category"></span></p>
-                <p><strong>Description:</strong> <span class="description"></span></p>
+                <p><span class="category"></span></p>
+                <p><i class="description"></i></p>
                 <p><strong>Author:</strong> <span class="author"></span></p>
             </div>
             <div class="modal-footer">

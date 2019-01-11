@@ -16,7 +16,8 @@ class BookReader {
             const file = `bin/publications/pub-${bookID}.rby`;
             fs.readFile(file,(err,data)=>{
                 if(err) {
-                    reject();
+                    reject(err);
+                    return;
                 }
                 this.book = JSON.parse(libCryptr.decrypt(data));
                 this.title.html(this.book.title);

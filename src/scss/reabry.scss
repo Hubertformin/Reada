@@ -55,9 +55,6 @@ section#account{
   form{
     width: 60%;
     margin: auto;
-    button.btn-block{
-      width: 100%;
-    }
   }
 }
 div.center{
@@ -90,6 +87,7 @@ div.wrapper{
   bottom: 0;
   background-color: rgba(0,0,0,0.5);
 }
+
 section#side_nav{
     position: fixed;
     top: 0;
@@ -118,6 +116,16 @@ section#main{
     a.sidenav-trigger{
       display: inline-block;
     }
+  }
+}
+
+.book-card{
+  height: 291px !important;
+  border-radius: 26px;
+  border: 1px solid #ddd;
+  //box-shadow: unset !important;
+  .card-image img{
+    border-radius: 26px;
   }
 }
 
@@ -173,11 +181,74 @@ input.box,select.box{
   padding: 10px;
   border: 1px solid #ddd;
 }
+button.btn-block{
+  width: 100%;
+}
 #detailsModal{
   top:20%!important;width:35%!important;
 }
 .modal{
   top: 1% !important;
+}
+.hbmodal{
+  display: none;
+  position: fixed;
+  top: 0;
+  left:0;
+  right: 0;
+  bottom: 0;
+  z-index: 1024;
+  background: rgba(255,255,255,0.7);
+  .content{
+    background: #fff;
+    border:1px solid #ddd;
+    position: relative;
+    margin: auto;
+    top: 50%;
+    height: 60%;
+    transform: translateY(-50%);
+    width: 50%;
+    min-height: 40%;
+    &.small{
+      width: 35%;
+    }
+    .header{
+      height: 15%;
+      padding: 14px;
+      border-bottom:1px solid #ddd;
+    }
+    .body{
+      height: 72%;
+      border-bottom:1px solid #ddd;
+      overflow-y: auto;
+    }
+    .footer{
+      height: 13%;
+      padding: 5px 25px;
+      text-align: right;
+    }
+
+  }
+}
+//account manager
+#accountManager {
+  .body{
+    .all_accounts{
+      height: 86%;
+      overflow-y: auto;
+      .collection-item{
+        cursor: pointer;
+        min-height: 65px !important;
+      }
+      .switch-user-password{
+        display: none;
+      }
+    }
+    .new_account{
+      padding:0 5px;
+      height: 14%;
+    }
+  }
 }
 //reader
 section#bookReader{

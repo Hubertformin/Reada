@@ -25,7 +25,7 @@
            </div>
             <div class="row">
                 <div ng-repeat="b in myBooks track by $index" class="col s3">
-                    <div class="card" style="height:261px;">
+                    <div class="card book-card" style="height:261px;">
                         <div class="card-image waves-effect waves-block waves-light" style="height:61%;">
                             <img class="activator" src="img/books.png">
                         </div>
@@ -35,7 +35,7 @@
                         </div>
                         <div class="card-reveal">
                             <span class="card-title grey-text text-darken-4" title="{{b.title}}">{{b.title}}<i class="material-icons right">close</i></span>
-                            <span class="description">{{b.description}}</span>
+                            <i class="description">{{b.description}}</i>
                             <span>Modified {{timeAgo(b.date)}}</span>
                             <hr>
                             <button title="Edit" ng-click="editBook(b)" class="btn-floating green waves-effect">

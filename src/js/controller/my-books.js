@@ -6,7 +6,7 @@ app.controller("myBooksCtr",($scope)=>{
     //backu
     const {ipcRenderer} = require("electron");
     var elems = document.querySelectorAll('.modal');
-    var instances = M.Modal.init(elems);
+    M.Modal.init(elems);
     //default variables
     $scope.createNewBookBtn = true;
     $scope.updateBook = {};
@@ -23,7 +23,10 @@ app.controller("myBooksCtr",($scope)=>{
             $scope.db.myBooks.toArray()
                 .then((data) => {
                     $scope.myBooks = data;
-                    localBooksBackup(data)
+                    $scope.myBooks = $scope.myBooks.filter(book=>{
+                        return book.authorID === $scope.currentUser.userID;
+                    });
+                    localBooksBackup(data);
                     $scope.$apply();
                 }).catch((err) => {
                 notify.error("Failed to load books!");
@@ -44,7 +47,7 @@ app.controller("myBooksCtr",($scope)=>{
                         const info =  JSON.parse(libCryptr.decrypt(data));
                         if (info.length !== 0 && $scope.myBooks.length === 0) {
                             $scope.db.myBooks.bulkPut(info).then(()=>{
-                                notify.info("Files restored!")
+                                //notify.info("Files restored!")
                             }).catch((err)=>{
                                 console.error(err);
                             });

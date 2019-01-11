@@ -1,6 +1,6 @@
 <section id="body" class="recentPage" ng-controller="recentCtr">
-    <div class="header white-text blue darken-4">
-        <h4 class="heading-text">Recent</h4>
+    <div class="header white-text blue-text text-darken-4 z-depth-1">
+        <h4 class="heading-text"><i class="material-icons left" style="font-size:1.3em;">access_time</i>Recent</h4>
     </div>
     <div class="body">
         <div ng-show="myBooks.length === 0" class="overlay">
@@ -18,7 +18,7 @@
             </div>
             <div class="col s12">
                 <div ng-repeat="b in recentBooks track by $index" class="col s3">
-                    <div class="card" style="height:261px;">
+                    <div class="card book-card" style="height:261px;">
                         <div class="card-image waves-effect waves-block waves-light" style="height:61%;">
                             <img class="activator" src="img/books.png">
                         </div>
@@ -37,7 +37,7 @@
                 </div>
             </div>
         </div>
-        <div class="row modified">
+        <div ng-hide="editBooks.length === 0" class="row modified">
             <div class="col s12 controls">
                 <h6>Modified</h6>
                 <!--<button class="btn-flat"><i class="material-icons">sort</i></button>-->
@@ -45,7 +45,7 @@
             </div>
             <div class="col s12">
                 <div ng-repeat="b in editBooks track by $index" class="col s3">
-                    <div class="card" style="height:261px;">
+                    <div class="card book-card" style="height:261px;">
                         <div class="card-image waves-effect waves-block waves-light" style="height:61%;">
                             <img class="activator" src="img/books.png">
                         </div>

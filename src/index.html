@@ -23,10 +23,10 @@
             <img src="../res/img/icon.png" id="loginLogoPic" alt="">
             <h3 class="orange-text text-darken-3 font-kaushan"> Reada</h3>
             <div style="visibility: hidden;" id="account_tabs" class="row">
-                <div class="col s12 tabs-nav">
+                <div id="accountPageTabs" class="col s12 tabs-nav">
                     <ul class="tabs">
                         <li ng-click="expandLogin(false)" class="tab col s6"><a id="login-tab" class="active" href="#login">Login</a></li>
-                        <li ng-click="expandLogin(true)" class="tab col s6"><a id="create-tab" href="#signup">Create account</a></li>
+                        <li ng-click="expandLogin(true)" class="tab col s6"><a id="create-tab" class="" href="#signup">Create account</a></li>
                     </ul>
                 </div>
                 <div id="login" class="col s12">
@@ -85,6 +85,9 @@
                 </div>
             </div>
         </div>
+        <div style="margin:40px 0;" class="right-align">
+            <button ng-show="showBackBtn" ng-click="accountPage.close()" class="btn-flat grey-text grey-border">close</button>
+        </div>
     </section>
     <ul id="slide-out" class="sidenav sidenav-fixed">
         <li><div class="user-view">
@@ -92,11 +95,11 @@
                 <img src="img/alone.jpg">
             </div>
             <a href="#!account"><img id="main_user_img" class="circle" ng-src="{{currentUser.img_url}}"></a>
-            <a href="#!account"><span class="white-text name">{{currentUser.fname+" "+currentUser.lname}}</span></a>
+            <a href="javascript:void(0)" ng-click="accountModal.open()"><span class="white-text name">{{currentUser.fname+" "+currentUser.lname}}</span></a>
             <a href="#!account"><span class="white-text email">@{{currentUser.username}}</span></a>
         </div>
         </li>
-        <li><a class="waves-effect" href="#/!"><i class="material-icons">access_time</i>Recent</a></li>
+        <li><a id="HomeLink" class="waves-effect" href="#/!"><i class="material-icons">access_time</i>Recent</a></li>
         <!--<li><a class="waves-effect" href="#!library"><i class="material-icons">library_books</i>Library</a></li>-->
         <li><a class="waves-effect" href="#!store"><i class="material-icons">shopping_basket</i>Store</a></li>
         <li><div class="divider"></div></li>
@@ -152,7 +155,48 @@
             </div>
         </div>
     </section>
+    <!--Account manager modal-->
+    <div id="accountManager" class="hbmodal">
+        <div class="content small blue-border">
+            <div class="header">
+                <h5 style="margin:0;" class="text-accent-4 blue-text">Switch Accounts?</h5>
+            </div>
+            <div class="body">
+                <div class="all_accounts">
+                    <ul class="collection">
+                        <li ng-repeat="u in users" class="collection-item avatar">
+                            <div ng-click="showSwitchPassword($event,u)" class="user-preview">
+                                <img ng-src="{{u.img_url}}" alt="" class="circle">
+                                <span class="title">{{u.fname+" "+u.lname}}</span>
+                                <p>@{{u.username}}</p>
+                                <p><i ng-show="currentUser.username === u.username">Logged in</i></p>
+                            </div>
+                            <div class="switch-user-password" style="margin-top: 10px;border-top:1px solid #ddd;padding-top:10px;">
+                                <div class="row">
+                                    <!-- Don't change the order of this two div's its used in the controller-->
+                                    <div class="col s9">
+                                        <input type="password" placeholder="Enter password">
+                                    </div>
+                                    <div class="col s3">
+                                        <button ng-click="switchLogin($event,u)" class="btn-floating blue"><i class="material-icons">arrow_forward</i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="new_account">
+                    <button ng-click="showAccountPage()" class="btn-flat blue-border blue-text btn-block"><i class="material-icons left">add</i>New User</button>
+                </div>
+            </div>
+            <div class="footer">
+                <button ng-click="accountModal.close()" class="btn-flat waves-effect">close</button>
+            </div>
+
+        </div>
+    </div>
     <!-- Scripts -->
+    <script src="js/model.js"></script>
     <script src="js/controller.js"></script>
     <script src="js/controller/recent.js"></script>
         <script src="js/controller/my-books.js"></script>

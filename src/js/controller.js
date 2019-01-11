@@ -30,7 +30,7 @@ app.filter('orderObjectBy',()=>{
         var filtered = [];
         angular.forEach(items,(item)=>{
             filtered.push(item);
-        })
+        });
         filtered.sort((a,b)=>{
             return(a[field] > b[field] ? 1: -1);
         });
@@ -39,6 +39,10 @@ app.filter('orderObjectBy',()=>{
     }
 });
 app.controller("mainCtr",($scope)=>{
+    //variables
+    $scope.showBackBtn = false;
+    $scope.recentBooks = [];
+    $scope.editBooks = [];
     //getting reade
     $scope.BookReader = new BookReader("#bookReader");
     //bookreader change sections
@@ -51,12 +55,12 @@ app.controller("mainCtr",($scope)=>{
             book.readTime = Date.now();
             $scope.db.myBooks.put(book).then(()=>{
                 console.log("Read time saved!");
-            })
+            });
             $scope.$apply()
         }).catch(err=>{
             notify.warning(`Book not found! <br/>Possible cause: Deleted by another program!`);
         })
-    }
+    };
 
     const {ipcRenderer} = require("electron");
     M.AutoInit();
@@ -70,7 +74,7 @@ app.controller("mainCtr",($scope)=>{
         fontSize : '16px',
     });
         var elem = document.querySelector("#settings");
-        var instances = M.Sidenav.init(elem,{
+        M.Sidenav.init(elem,{
             edge:'right'
         });
         //expanding login
@@ -81,7 +85,7 @@ app.controller("mainCtr",($scope)=>{
             }else{
                 img.css({height:'auto',width:"auto"})
             }
-        }
+        };
         //variavbles
         $scope.currentUser = {};
         $scope.users = [];
@@ -98,10 +102,20 @@ app.controller("mainCtr",($scope)=>{
             $scope.db.users.toArray()
                 .then((data)=>{
                     $scope.users = data;
-                })
+                    $scope.users.forEach(el=>{
+                        if (typeof el.image === "object") {
+                            el.img_url = URL.createObjectURL(el.image);
+                        }else {
+                            el.img_url = "img/user.png";
+                        }
+                    })
+                });
             $scope.db.myBooks.toArray()
                 .then((data)=>{
                     $scope.myBooks = data;
+                    $scope.myBooks = $scope.myBooks.filter(book=>{
+                        return book.authorID === $scope.currentUser.userID;
+                    });
                 })
         }).then(()=>{
             if(localStorage.getItem("user") !== null) {
@@ -137,7 +151,7 @@ app.controller("mainCtr",($scope)=>{
                         $scope.$apply();
                     }).catch((err)=>{
                         console.log(err);
-                    })
+                    });
                     $('section#account').fadeOut("fast");
                     $('#account_tabs').waitMe("hide");
                 }
@@ -161,33 +175,46 @@ app.controller("mainCtr",($scope)=>{
         //create acoount
         const account = {
             login:({username,password})=>{
-                $scope.db.transaction('rw',$scope.db.users,()=>{
-                    $scope.db.users.where({username:username,password:password}).first((user)=>{
-                        if (typeof user !== "object") {
-                            notify.warning("Username or incorrect password!");
-                            return;
-                        }
-                        $scope.currentUser = user;
-                        if(typeof $scope.currentUser.image === "object") {
-                            $scope.currentUser.img_url = URL.createObjectURL($scope.currentUser.image);
-                        }else{
-                            $scope.currentUser.img_url = "img/user.png";
-                        }
-                        $scope.$apply();
-                        localStorage.setItem("user",JSON.stringify(user));
-                        $('section#account').fadeOut("fast");
+                return new Promise((resolve,reject)=>{
+                    $scope.db.transaction('rw',$scope.db.users,()=>{
+                        $scope.db.users.where({username:username,password:password}).first((user)=>{
+                            if (typeof user !== "object") {
+                                notify.warning("Incorrect username or password!");
+                                return;
+                            }
+                            $scope.currentUser = user;
+                            if(typeof $scope.currentUser.image === "object") {
+                                $scope.currentUser.img_url = URL.createObjectURL($scope.currentUser.image);
+                            }else{
+                                $scope.currentUser.img_url = "img/user.png";
+                            }
+                            $scope.$apply();
+                            localStorage.setItem("user",JSON.stringify(user));
+                            $('section#account').fadeOut("fast");
+                            resolve();
+                        })
+                    }).catch((err)=>{
+                        console.error(err);
+                        reject();
                     })
-                }).catch((err)=>{
-                    console.error(err);
                 })
             },
             create:({fname,lname,username,phone,password})=>{
+                for (let i = 0;i < $scope.users.length;i++) {
+                    if (fname === $scope.users[i].fname && lname === $scope.users[i].lname || username === $scope.users[i].username) {
+                        notify.warning("This users account already exist!")
+                        return;
+                    }
+                }
                     $scope.db.transaction('rw',$scope.db.users,()=>{
                         $scope.db.users.put({fname:fname,lname:lname,username:username,password:password,phone:phone})
                         $scope.db.users.toArray()
                             .then((data)=>{
                                 $scope.users = data;
-                                $scope.currentUser = data[0];
+                                $scope.getCurrentUser = data.filter(user=>{
+                                    return user.username === username;
+                                });
+                                $scope.currentUser = $scope.getCurrentUser[0];
                                 $scope.currentUser.img_url = "img/user.png";
                                 localStorage.setItem("user",JSON.stringify($scope.currentUser));
                                 $('section#account').fadeOut("fast");
@@ -218,7 +245,7 @@ app.controller("mainCtr",($scope)=>{
                 notify.warning("Enter your phone number!");
                 return;
             }
-            if(typeof $scope.n_password !== 'string' || $scope.n_password == "" || $scope.n_password !== $scope.c_password) {
+            if(typeof $scope.n_password !== 'string' || $scope.n_password === "" || $scope.n_password !== $scope.c_password) {
                 notify.warning("Invalid password or passwords do not match");
                 return;
             }
@@ -247,9 +274,61 @@ app.controller("mainCtr",($scope)=>{
                 username:$scope.username,
                 password:$scope.password
             })
+
         })
 
         //==================== FUNCTIONS =================
+        //to show login page
+        $scope.accountPage = new FadeToggler("#account");
+        $scope.showAccountPage = ()=>{
+        $scope.showBackBtn = true;
+        $('#account_tabs').css({visibility:"visible"});
+        $('#accountPageTabs').css({visibility:"hidden"});
+        $scope.accountPage.open();
+        try {
+            document.querySelector('#create-tab').click();
+        }catch (e) {
+            //console.error(e);
+        }finally {
+            $scope.accountModal.close();
+        }
+    }
+        $scope.accountModal = new FadeToggler('#accountManager');
+        //show passord
+        $scope.showSwitchPassword = (e,user)=>{
+            if(user.username !== $scope.currentUser.username) {
+                $(e.currentTarget).next().slideToggle("fast");
+            }
+        };
+        $scope.switchLogin = (e,user)=>{
+            const password = $(e.currentTarget).parent().prev().children('input');
+            //console.log(user,password.val());
+            account.login({
+                username:user.username,
+                password:password.val()
+            }).then(()=>{
+                $('.switch-user-password').slideUp("fast");
+                password.val("");
+                document.querySelector("#HomeLink").click();
+                console.log(document.querySelector("#HomeLink"))
+                $scope.accountPage.close();
+                $scope.db.myBooks.toArray()
+                    .then((data)=>{
+                        $scope.myBooks = data;
+                        $scope.myBooks = $scope.myBooks.filter(book=>{
+                            return book.authorID === $scope.currentUser.userID;
+                        });
+                        $scope.recentBooks = $scope.myBooks.filter((el)=>{
+                            return typeof el.readTime === "number";
+                        });
+                        $scope.editBooks = $scope.myBooks.filter((el)=>{
+                            return typeof el.date === "number";
+                        });
+                        console.log($scope.recentBooks,$scope.editBooks)
+                        $scope.$apply();
+                    })
+            })
+        };
         $scope.timeAgo = (time)=>{
             var now = Date.now(),ago = Number(time),
                 diff = now - ago;
@@ -267,7 +346,7 @@ app.controller("mainCtr",($scope)=>{
             if(seconds <= 60){
                 return "Just now";
             }else if(minutes <= 60){
-                return (minutes === 1)?'A min ago':`${minutes} minutes ago`;
+                return (minutes === 1)?'A min ago':`${minutes} mins ago`;
             }else if(hours < 24){
                 return (hours === 1)?'An Hour ago':`${hours} hours ago`;
             }else if(days < 7){

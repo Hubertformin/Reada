@@ -6,8 +6,9 @@ const Cryptr = require('cryptr');
 const libCryptr = new Cryptr('LibraryKey');
 const { Notify }  = require('../js/modules/Notifications');
 const notify = new Notify();
+const Dexie = require("dexie");
 
-
+//this object is used by functions outside of controller
 var currentBook = {
     author:'',
     contents:[
@@ -32,28 +33,64 @@ app.controller("mainCtr",($scope)=>{
         textPos : 'vertical',
         fontSize : '25px',
     });
+    //
+    $scope.myBooks = [];
+    $scope.dbcurrentbook = [{}];
+    $scope.db = new Dexie('ReadbryDB');
+    $scope.db.version(1).stores({
+        myBooks:"++id,author,&bookID,category,data,creationDate,cover_url,description,path,title",
+        users:"++userID,fname,lname,username,phone,password",
+        library:"++id",
+    });
+
     angular.element(document).ready(()=>{
         ipc.on('data', (event, message) => {
-            $scope.bookData = JSON.parse(message);
-            currentBook.title = $scope.bookData.title;
-            currentBook.id = $scope.bookData.bookID;
-            $scope.$apply();
-            //read contents of file
-            $scope.currentBook = [];
-            fs.readFile(`bin/publications/pub-${$scope.bookData.bookID}.rby`,(err,file)=>{
-                if(err){
-                    console.error(err);
-                    notify.error("Book data corrupt!");
-                    return;
-                }
-                let data = JSON.parse(libCryptr.decrypt(file));
-                currentBook = data;
-                $scope.currentBook = data;
+            $scope.db.transaction('rw',$scope.db.myBooks,$scope.db.users,()=>{
+                /*$scope.db.users.toArray()
+                    .then((data)=>{
+                        $scope.users = data;
+                    })*/
+                $scope.db.myBooks.toArray()
+                    .then((data)=>{
+                        $scope.myBooks = data;
+                    })
+            }).then(()=>{
+                $scope.bookData = JSON.parse(message);
+                currentBook.title = $scope.bookData.title;
+                currentBook.id = $scope.bookData.bookID;
+                $scope.dbcurrentbook = $scope.myBooks.filter(value => {
+                    return value.bookID === $scope.bookData.bookID;
+                })
+                console.log($scope.dbcurrentbook)
                 $scope.$apply();
-                $('body').waitMe("hide");
-                //going to last tab
-                const newNodes = document.querySelectorAll('.chap_list');
-                newNodes[currentBook.currentSection].click();
+                //read contents of file
+                $scope.currentBook = [];
+                fs.readFile(`bin/publications/pub-${$scope.bookData.bookID}.rby`,(err,file)=>{
+                    if(err){
+                        console.error(err);
+                        notify.error("Unable to read book,Book data corrupt!");
+                        return;
+                    }
+                    let data = JSON.parse(libCryptr.decrypt(file));
+                    currentBook = data;
+                    $scope.currentBook = data;
+                    console.log(currentBook)
+                    currentBook.author = $scope.dbcurrentbook[0].author;
+                    currentBook.authorID = $scope.dbcurrentbook[0].authorID;
+                    currentBook.category = $scope.dbcurrentbook[0].category;
+                    currentBook.title = $scope.dbcurrentbook[0].title;
+                    currentBook.cover_url = $scope.dbcurrentbook[0].cover_url;
+                    currentBook.creationDate = $scope.dbcurrentbook[0].creationDate;
+                    currentBook.date = $scope.dbcurrentbook[0].date;
+                    currentBook.readTime = $scope.dbcurrentbook[0].readTime;
+                    currentBook.description = $scope.dbcurrentbook[0].description;
+                    currentBook.bookID = $scope.dbcurrentbook[0].bookID;
+                    $scope.$apply();
+                    $('body').waitMe("hide");
+                    //going to last tab
+                    const newNodes = document.querySelectorAll('.chap_list');
+                    newNodes[currentBook.currentSection].click();
+                })
             })
         });
         //initialize editor
@@ -141,13 +178,14 @@ app.controller("mainCtr",($scope)=>{
                 if(err) {
                     console.error(err)
                     notify.error("Unable to save!");
+                    return;
                 }
             });
         };
         $scope.addSection = ()=>{
             const nodeLength = document.querySelectorAll('.chap_list').length;
-            //currentBook.contents.push({title:`Untitled${nodeLength+1}`,content:''});
-            $scope.currentBook.contents.push({title:`Untitled${nodeLength+1}`,content:''});
+            currentBook.contents.push({title:`Untitled${nodeLength+1}`,content:''});
+            //$scope.currentBook.contents.push({title:`Untitled${nodeLength+1}`,content:''});
             const newNodes = document.querySelectorAll('.chap_list');
             newNodes[newNodes.length - 1].click();
             console.log(currentBook);

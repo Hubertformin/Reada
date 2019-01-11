@@ -1,7 +1,7 @@
 {
   "name": "reada",
   "productName": "Reada writers app",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Personal Library",
   "main": "index.js",
   "scripts": {

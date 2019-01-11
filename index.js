@@ -1,4 +1,5 @@
 const {app, BrowserWindow, ipcMain,Menu} = require("electron");
+var pjson = require('./package.json')
 const fs = require('fs');
 let win;
 
@@ -9,7 +10,7 @@ function createWindow() {
         height:height,
         minHeight:600,
         minWidth:950,
-        title:"Reada",
+        title:`Reada ${pjson.version}`,
         icon:"res/img/icon.png",
         webPreferences:{
             nodeIntegration:true
@@ -52,7 +53,7 @@ function EditorWindow(arg) {
     let editor = new BrowserWindow({
         height:650,
         width:1050,
-        title:`${data.title} - Editor`,
+        title:`${data.title} - Reada Editor`,
         icon:"res/img/icon.png",
     });
     //editor.webContents.openDevTools();

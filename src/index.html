@@ -19,9 +19,12 @@
 </head>
 <body ng-app="App" ng-controller="mainCtr" ng-jq>
     <section id="account">
+        <div style="margin:40px 0;" class="right-align">
+            <button ng-show="showBackBtn" ng-click="accountPage.close()" class="btn-flat grey-text grey-border">close</button>
+        </div>
         <div class="contents">
             <img src="../res/img/icon.png" id="loginLogoPic" alt="">
-            <h3 class="orange-text text-darken-3 font-kaushan"> Reada</h3>
+            <h3 class="blue-text text-darken-3 font-kaushan"> Reada</h3>
             <div style="visibility: hidden;" id="account_tabs" class="row">
                 <div id="accountPageTabs" class="col s12 tabs-nav">
                     <ul class="tabs">
@@ -41,7 +44,7 @@
                                 <input type="password" id="password" ng-model="password">
                             </div>
                             <div class="col s12">
-                                <button type="submit" class="btn-flat btn-block orange-border orange-text">Login</button>
+                                <button type="submit" class="btn-flat btn-block blue-border blue-text">Login</button>
                             </div>
                         </div>
                     </form>
@@ -78,15 +81,12 @@
                                 <input type="password" id="c_password" ng-model="c_password">
                             </div>
                             <div class="col s12">
-                                <button type="submit" class="btn-flat btn-block orange-border orange-text">Continue <i class="material-icons right">arrow_forward</i></button>
+                                <button type="submit" class="btn-flat btn-block blue-border blue-text">Continue <i class="material-icons right">arrow_forward</i></button>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
-        </div>
-        <div style="margin:40px 0;" class="right-align">
-            <button ng-show="showBackBtn" ng-click="accountPage.close()" class="btn-flat grey-text grey-border">close</button>
         </div>
     </section>
     <ul id="slide-out" class="sidenav sidenav-fixed">
@@ -106,16 +106,34 @@
         <li><a class="subheader">Personal</a></li>
         <li class=""><a href="#!my_books"><i class="material-icons">book</i>My Books</a></li>
         <li class=""><a href="#!account"><i class="material-icons">person</i>Account</a></li>
-        <!--<li class=""><a data-target="settings" class="sidenav-trigger" href="javascript:void(0)"><i class="material-icons">settings</i> Settings</a></li>-->
+        <li class=""><a data-target="settings" class="sidenav-trigger" href="javascript:void(0)"><i class="material-icons">settings</i> Settings</a></li>
     </ul>
     <section id="main">
         <a href="javascript:void(0)" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
         <div id="view" ng-view></div>
     </section>
     <!-- Settings panel -->
-    <!--<nav id="settings" class="sidenav">
+    <nav id="settings" class="sidenav">
+        <h4>General</h4>
+        <hr>
+        <div class="row">
+            <div class="col s9">Automatically backup books</div>
+            <div class="switch col s3">
+                <label>
+                    <input type="checkbox" checked="checked" />
+                    <span class="lever"></span>
+               </label>
+            </div>
+        </div>
+        <h4>About</h4>
+        <hr>
+        <ul>
+            <li><strong>Product Name:</strong> Reada</li>
+            <li><strong>Version:</strong> 1.0.1</li>
+            <li><strong>Developer: Hubert Formin</strong></li>
+        </ul>
 
-    </nav>-->
+    </nav>
     <!--Book reader-->
     <section id="bookReader" ng-init="darkMode=false" ng-class="(darkMode)?'darkMode':''">
         <section id="mainNav">

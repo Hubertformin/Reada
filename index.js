@@ -1,3 +1,10 @@
+//handle setupevents as quickly as possible
+const setupEvents = require('./installers/setupEvents');
+if (setupEvents.handleSquirrelEvent()) {
+    // squirrel event handled and app will exit in 1000ms, so don't do anything else
+    return;
+}
+
 const {app, BrowserWindow, ipcMain,Menu} = require("electron");
 var pjson = require('./package.json')
 const fs = require('fs');
@@ -17,15 +24,47 @@ function createWindow() {
         }
     })
     //menu template
-    const template = [{
+    const template = [ {
+        label: 'Edit',
+        submenu: [
+            {role: 'undo'},
+            {role: 'redo'},
+            {type: 'separator'},
+            {role: 'cut'},
+            {role: 'copy'},
+            {role: 'paste'},
+            {role: 'pasteandmatchstyle'},
+            {role: 'delete'}
+        ]
+    }, {
         label: 'View',
         submenu: [
-            {role: 'toggledevtools'}
+            {role: 'resetzoom'},
+            {role: 'zoomin'},
+            {role: 'zoomout'},
+            {role: 'togglefullscreen'},
+            {type: 'separator'},
+            {
+                label:'Developer',
+                submenu:[
+                    {role:'reload'},
+                    {role: 'toggledevtools'}
+                ]
+            }
         ]
-    }];
+    },{
+        role: 'help',
+        submenu: [
+            {
+                label: 'About Developer',
+                click () { require('electron').shell.openExternal('https://silverslopecm.ml') }
+            }
+        ]
+    }
+    ];
 
-    //const menu = Menu.buildFromTemplate(template);
-    //Menu.setApplicationMenu(menu);
+    const menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(menu);
 
     win.loadFile('src/index.html');
     //win.webContents.openDevTools();
@@ -57,7 +96,7 @@ function EditorWindow(arg) {
         icon:"res/img/icon.png",
     });
     //editor.webContents.openDevTools();
-    //editor.setMenu(null);
+    editor.setMenu(null);
     editor.loadFile("src/BookMaker/index.html");
     editor.webContents.on('did-finish-load',()=>{
         editor.webContents.send('data',arg);

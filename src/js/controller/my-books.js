@@ -8,6 +8,7 @@ app.controller("myBooksCtr",($scope)=>{
     var elems = document.querySelectorAll('.modal');
     M.Modal.init(elems);
     //default variables
+    $scope.bookListView = true;
     $scope.createNewBookBtn = true;
     $scope.updateBook = {};
     //back up to localDatabase
@@ -26,46 +27,24 @@ app.controller("myBooksCtr",($scope)=>{
                     $scope.myBooks = $scope.myBooks.filter(book=>{
                         return book.authorID === $scope.currentUser.userID;
                     });
-                    localBooksBackup(data);
+                    if(data.length !== 0) {
+                        localBooksBackup(data);
+                    }
                     $scope.$apply();
                 }).catch((err) => {
                 notify.error("Failed to load books!");
+                console.error(err);
             })
         })
     }
     loadBooks();
-    //looking for local backyu
-    if ($scope.myBooks.length === 0) {
-        fs.exists("bin/publications/config.sb",(exists)=>{
-            if (exists) {
-                fs.readFile("bin/publications/config.sb",(err,data)=>{
-                    if(err) {
-                        console.error(err)
-                        return;
-                    }
-                    try {
-                        const info =  JSON.parse(libCryptr.decrypt(data));
-                        if (info.length !== 0 && $scope.myBooks.length === 0) {
-                            $scope.db.myBooks.bulkPut(info).then(()=>{
-                                //notify.info("Files restored!")
-                            }).catch((err)=>{
-                                console.error(err);
-                            });
-                        }
-                    }catch (e) {
-
-                    }
-                })
-            }
-        })
-    }
     //launch editor window
     $scope.launchEditor = ({title,bookID})=>{
         fs.exists(`bin/publications/pub-${bookID}.rby`,exists => {
             if (exists) {
                 ipcRenderer.send('launchEditor', JSON.stringify({title,bookID}));
             } else {
-                notify.warning(`Book not found! <br/>Possible cause: Deleted by another program!`);
+                //notify.warning(`Book not found! <br/>Possible cause: Deleted by another program!`);
             }
         })
     };
@@ -250,6 +229,10 @@ app.controller("myBooksCtr",($scope)=>{
             })
 
         });
+    }
+    //to chage book view
+    $scope.changeBookView = ()=>{
+        $scope.bookListView = !$scope.bookListView;
     }
 
     //TODO Open Book function was placed in controller js for global purposes

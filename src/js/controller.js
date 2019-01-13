@@ -103,9 +103,9 @@ app.controller("mainCtr",($scope)=>{
                 .then((data)=>{
                     $scope.users = data;
                     $scope.users.forEach(el=>{
-                        if (typeof el.image === "object") {
+                        try{
                             el.img_url = URL.createObjectURL(el.image);
-                        }else {
+                        }catch (e) {
                             el.img_url = "img/user.png";
                         }
                     })
@@ -117,7 +117,82 @@ app.controller("mainCtr",($scope)=>{
                         return book.authorID === $scope.currentUser.userID;
                     });
                 })
-        }).then(()=>{
+        })
+            .then(()=>{
+                let dbCrypt = new Cryptr("localDB");
+                if($scope.users.length !== 0) {
+                    let backup = {
+                        users:$scope.users
+                    };
+                    fs.writeFile("bin/db00.bk",dbCrypt.encrypt(JSON.stringify(backup)),(err)=>{
+                        if (err) {
+                            console.error(err);
+                            return;
+                        }
+                    });
+                }
+                else if($scope.users.length === 0) {
+                    //readfile to database
+                    fs.readFile("bin/db00.bk",(err,data)=>{
+                        if(err) {
+                            console.error("No backup DB or unable to read backup file");
+                            //click sign up tab
+                            $('.tab > a').removeClass("active");
+                            document.querySelector('#create-tab').click();
+                            return;
+                        }
+                        try {
+                            let db = JSON.parse(dbCrypt.decrypt(data));
+                            //updating database
+                            $scope.db.transaction('rw',$scope.db.users,()=>{
+                                $scope.db.users.bulkPut(db.users);
+                                $scope.db.users.toArray()
+                                    .then((data)=>{
+                                        $scope.users = data;
+                                    });
+                            })
+                                .then(()=>{
+                                    $scope.$apply();
+                                    console.log(db);
+                                    console.log("Db backed up!");
+                                })
+
+                        }catch (e) {
+                            console.error("Back up file corrupt!");
+                        }
+                    })
+                }
+                if ($scope.myBooks.length === 0) {
+                    const libCryptr = new Cryptr('LibraryKey');
+                    fs.exists("bin/publications/config.sb",(exists)=>{
+                        if (exists) {
+                            fs.readFile("bin/publications/config.sb",(err,data)=>{
+                                if(err) {
+                                    console.error(err)
+                                    return;
+                                }
+                                try {
+                                    const info =  JSON.parse(libCryptr.decrypt(data));
+                                    if (info.length !== 0 && $scope.myBooks.length === 0) {
+                                        $scope.db.myBooks.bulkPut(info).then(()=>{
+                                            console.log("books backedup");
+                                            $scope.myBooks = info;
+                                            $scope.$apply();
+                                        }).catch((err)=>{
+                                            console.error(err);
+                                        });
+                                    }
+                                }catch (e) {
+                                    console.error(e)
+                                }
+                            })
+                        }else {
+                            console.log("doesn't exist")
+                        }
+                    })
+                }
+            })
+            .then(()=>{
             if(localStorage.getItem("user") !== null) {
                 $scope.currentUser = JSON.parse(localStorage.getItem("user"));
                 $scope.$apply();
@@ -142,9 +217,9 @@ app.controller("mainCtr",($scope)=>{
                     console.log($scope.currentUser.userID);
                     $scope.db.users.get($scope.currentUser.userID,(user)=>{
                         $scope.currentUser = user;
-                        if(typeof $scope.currentUser.image === "object") {
+                        try{
                             $scope.currentUser.img_url = URL.createObjectURL($scope.currentUser.image);
-                        }else{
+                        }catch (e) {
                             $scope.currentUser.img_url = "img/user.png";
                         }
                         localStorage.setItem("user",JSON.stringify(user));
@@ -156,21 +231,22 @@ app.controller("mainCtr",($scope)=>{
                     $('#account_tabs').waitMe("hide");
                 }
             }
-        }).then(()=>{
+        })
+            .then(()=>{
             $scope.$apply();
             if($scope.users.length === 0 && localStorage.getItem("user") === null){
                 $('#account_tabs').css({visibility:"visible"});
                 $('#account_tabs').waitMe("hide");
-                $('.tab > a').removeClass("active");
-                document.querySelector('#create-tab').click();
+                //the click of the signup would depend if back up was found
             }else if($scope.users.length !== 0 && localStorage.getItem("user") === null){
                 $('#account_tabs').css({visibility:"visible"});
                 $('#account_tabs').waitMe("hide");
             }
-        }).catch((err)=>{
+        })
+            .catch((err)=>{
             console.error(err);
             notify.error("Unable to read Database!");
-        })
+        });
         //get account
         //create acoount
         const account = {
@@ -183,9 +259,9 @@ app.controller("mainCtr",($scope)=>{
                                 return;
                             }
                             $scope.currentUser = user;
-                            if(typeof $scope.currentUser.image === "object") {
+                            try{
                                 $scope.currentUser.img_url = URL.createObjectURL($scope.currentUser.image);
-                            }else{
+                            } catch (e) {
                                 $scope.currentUser.img_url = "img/user.png";
                             }
                             $scope.$apply();

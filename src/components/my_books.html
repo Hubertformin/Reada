@@ -19,11 +19,14 @@
            <div class="row">
                <div class="col s12 controls right-align">
                    <span ng-hide="myBooks.length == 0">{{myBooks.length}} book(s)</span>
-                   <button class="btn-flat"><i class="material-icons">sort</i></button>
+                   <button ng-click="changeBookView()" class="btn-flat">
+                       <i ng-show="bookListView" class="material-icons">sort</i>
+                       <i ng-hide="bookListView" class="material-icons">apps</i>
+                   </button>
                    <hr>
                </div>
            </div>
-            <div class="row">
+            <div ng-hide="bookListView" class="row">
                 <div ng-repeat="b in myBooks track by $index" class="col s3">
                     <div class="card book-card" style="height:261px;">
                         <div class="card-image waves-effect waves-block waves-light" style="height:61%;">
@@ -47,6 +50,27 @@
                     </div>
                 </div>
             </div>
+            <div ng-show="bookListView" class="hor-list">
+                <div ng-repeat="b in myBooks track by $index" class="item">
+                    <div class="row">
+                        <div class="img col s2">
+                            <img src="img/books2.png" alt="">
+                        </div>
+                        <div class="info col s7" title="{{b.description}}">
+                            <h5 class="title">{{b.title}}</h5>
+                            <p>{{b.category}} | <small>Modified {{timeAgo(b.date)}}</small></p>
+                            <p><i>{{b.description}}</i></p>
+                        </div>
+                        <div class="actions col s3">
+                            <button title="Edit" ng-click="editBook(b)" class="btn-floating green waves-effect">
+                                <i class="material-icons left">edit</i></button>
+                            <button ng-click="openBook(b)" title="Read" class="btn-floating blue waves-effect"><i class="material-icons left">remove_red_eye</i></button>
+                            <button ng-click="deleteBook(b)" title="Delete" class="btn-floating red darken-4 waves-effect"><i class="material-icons left">delete</i></button>
+                            <button ng-click="bookSettings($index)" title="Settings" class="btn-floating grey waves-effect"><i class="material-icons left">build</i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
     </div>
 
@@ -54,12 +78,12 @@
     <div id="createBook" class="modal">
         <form id="createBookForm" action="#">
         <div class="modal-content">
-            <h4 ng-show="createNewBookBtn" class="orange-text">Create book</h4>
-            <h4 ng-hide="createNewBookBtn" class="orange-text">Change Metadata</h4>
+            <h4 ng-show="createNewBookBtn" class="blue-text">Create book</h4>
+            <h4 ng-hide="createNewBookBtn" class="blue-text">Change Metadata</h4>
             <div>
                 <div class="row">
                     <div class="col">
-                        <div class="addImage orange darken-4 white-text">
+                        <div class="addImage blue darken-4 white-text">
                             <i class="material-icons medium">add_circle_outline</i>
                         </div>
                     </div>
